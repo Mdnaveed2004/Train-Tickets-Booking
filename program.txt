@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <string.h>
+
+// Define a structure for Train
+struct Train {
+    int trainNumber;
+    char trainName[50];
+    int totalTickets;
+    int ticketsAvailable;
+};
+
+// Function to display train information
+void displayTrain(struct Train t) {
+    printf("\nTrain Number: %d\n", t.trainNumber);
+    printf("Train Name: %s\n", t.trainName);
+    printf("Total Tickets: %d\n", t.totalTickets);
+    printf("Available Tickets: %d\n", t.ticketsAvailable);
+}
+
+// Function to book tickets
+void bookTickets(struct Train *t, int ticketsToBook) {
+    if (ticketsToBook > t->ticketsAvailable) {
+        printf("Not enough tickets available! Only %d tickets are available.\n", t->ticketsAvailable);
+    } else {
+        t->ticketsAvailable -= ticketsToBook;
+        printf("Successfully booked %d tickets.\n", ticketsToBook);
+        printf("Tickets remaining: %d\n", t->ticketsAvailable);
+    }
+}
+
+// Function to initialize train details
+void initializeTrain(struct Train *t, int trainNumber, const char *trainName, int totalTickets) {
+    t->trainNumber = trainNumber;
+    strcpy(t->trainName, trainName);
+    t->totalTickets = totalTickets;
+    t->ticketsAvailable = totalTickets;  // Initially, all tickets are available
+}
+
+int main() {
+    // Initialize train data
+    struct Train trains[3];
+
+    initializeTrain(&trains[0], 17487, "Tirumala express", 100);
+    initializeTrain(&trains[1], 20806, "Andhra express", 50);
+    initializeTrain(&trains[2], 12625, "kerala express", 75);
+
+    int choice, ticketsToBook, trainChoice;
+
+    while(1) {
+        printf("\nRailway Ticket Booking System\n");
+        printf("1. View Train Information\n");
+        printf("2. Book Tickets\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+            case 1:
+                // Display all train information
+                for (int i = 0; i < 3; i++) {
+                    displayTrain(trains[i]);
+                }
+                break;
+
+            case 2:
+                // Select a train and book tickets
+                printf("Select a train to book tickets (1 - Tirumala express, 2 - Andhra express, 3 - kerala express): ");
+                scanf("%d", &trainChoice);
+
+                if (trainChoice < 1 || trainChoice > 3) {
+                    printf("Invalid choice! Please select a valid train.\n");
+                    break;
+                }
+
+                printf("Enter the number of tickets to book: ");
+                scanf("%d", &ticketsToBook);
+
+                // Book tickets for the selected train
+                bookTickets(&trains[trainChoice - 1], ticketsToBook);
+                break;
+
+            case 3:
+                // Exit the program
+                printf("Exiting the system...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
